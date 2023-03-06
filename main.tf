@@ -1,14 +1,19 @@
-provider "aws" {
-  region = "us-east-1"
+
+data "aws_ami" "image-terraform" {
+  owners = ["self"]
+  filter {
+    name   = "name"
+    values = ["*terraform*"]
+  }
 }
+
+
 
 # Create a EC2 instance
 resource "aws_instance" "atakhans_instance" {
-  ami           = "ami-0b0bea9a76f8bc635"
-  instance_type = "t2.micro"
+  ami                         = data.aws_ami.image-terraform.id
+  instance_type               = var.my_instance_type
   associate_public_ip_address = true
-  tags = {
-    name = "a-new-name"
-    owner = "atakhan"
-  }
+
 }
+
